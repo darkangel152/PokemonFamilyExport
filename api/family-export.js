@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     const apiUrl = `https://www.pokemonpricetracker.com/api/v2/cards?name=${encodeURIComponent(
       name
     )}&language=${language}`;
-
+console.log("Fetching from API:", apiUrl);
     const response = await fetch(apiUrl, {
       headers: {
         Authorization: `Bearer ${process.env.POKEMON_PRICE_TRACKER_API_KEY}`,
