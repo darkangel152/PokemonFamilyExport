@@ -18,7 +18,7 @@ const FamilyExportPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const exportFamilyCSV = async () => {
+  const exportCSV = async () => {
     setError("");
     const name = pokemonName.trim();
     if (!name) return setError("Please enter a Pokémon name.");
@@ -27,8 +27,8 @@ const FamilyExportPage = () => {
     try {
       const cards = await fetchCards(name, language);
 
-      if (!cards.length) {
-        setError("No cards found for this Pokémon.");
+      if (!cards || !cards.length) {
+        setError(`No cards found for ${name}.`);
         setLoading(false);
         return;
       }
@@ -50,7 +50,7 @@ const FamilyExportPage = () => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${name.toLowerCase()}_${language}_family.csv`;
+      link.download = `${name.toLowerCase()}_${language}.csv`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -81,7 +81,7 @@ const FamilyExportPage = () => {
         <option value="english">English</option>
       </select>
 
-      <button onClick={exportFamilyCSV} disabled={loading} style={{ padding: 8 }}>
+      <button onClick={exportCSV} disabled={loading} style={{ padding: 8 }}>
         {loading ? "Exporting..." : "Export CSV"}
       </button>
 
