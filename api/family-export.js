@@ -24,4 +24,5 @@ console.log("Fetching from API:", apiUrl);
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
+  console.log("Fetching from API:", apiUrl);
 }
