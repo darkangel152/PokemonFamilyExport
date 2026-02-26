@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+ export default async function handler(req, res) {
   try {
     const { search, language = "japanese" } = req.query;
 
@@ -21,17 +21,13 @@ export default async function handler(req, res) {
     const text = await response.text();
     if (!response.ok) {
       console.error("Pokémon API returned error:", text);
-      return res.status(response.status).json({
-        error: `Pokémon API error: ${text}`,
-        status: response.status,
-      });
+      return res.status(response.status).json({ error: `Pokémon API error: ${text}` });
     }
 
     let data;
     try {
       data = JSON.parse(text);
     } catch (parseErr) {
-      console.error("Error parsing Pokémon API response:", text);
       return res.status(500).json({ error: "Failed to parse Pokémon API response" });
     }
 
@@ -42,7 +38,7 @@ export default async function handler(req, res) {
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(data);
   } catch (err) {
-    console.error("Serverless function error:", err);
+    console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 }
