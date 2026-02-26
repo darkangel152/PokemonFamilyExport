@@ -4,16 +4,18 @@ const FamilyExportPage = ({ fetchCards }) => {
   const [pokemonName, setPokemonName] = useState("");
   const [language, setLanguage] = useState("japanese");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(""); // <-- error state
 
   const exportFamilyCSV = async () => {
-    if (!pokemonName.trim()) return alert("Enter a Pokémon name");
+    setError(""); // reset previous error
+    if (!pokemonName.trim()) return setError("Please enter a Pokémon name.");
 
     setLoading(true);
     try {
       const initialCards = await fetchCards(pokemonName, language);
 
       if (!initialCards.length) {
-        alert("No cards found");
+        setError("No cards found for this Pokémon.");
         setLoading(false);
         return;
       }
@@ -48,7 +50,7 @@ const FamilyExportPage = ({ fetchCards }) => {
       document.body.removeChild(link);
     } catch (err) {
       console.error(err);
-      alert("Error fetching cards");
+      setError(err.message || "Error fetching cards. Check API key or Pokémon name.");
     } finally {
       setLoading(false);
     }
@@ -73,6 +75,13 @@ const FamilyExportPage = ({ fetchCards }) => {
       <button onClick={exportFamilyCSV} disabled={loading} style={{ padding: 8 }}>
         {loading ? "Exporting..." : "Export CSV"}
       </button>
+
+      {/* Display errors inline */}
+      {error && (
+        <div style={{ marginTop: 20, color: "red", fontWeight: "bold" }}>
+          ⚠ {error}
+        </div>
+      )}
     </div>
   );
 };
