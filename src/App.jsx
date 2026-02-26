@@ -1,14 +1,15 @@
 import React from "react";
 import FamilyExportPage from "./pages/FamilyExportPage";
 
-const App = () => {
-  const fetchCards = async (name, language = "japanese") => {
-    const res = await fetch(`/api/family-export?name=${encodeURIComponent(name)}&language=${language}`);
-    if (!res.ok) throw new Error(`Failed to fetch cards: ${res.status}`);
-    return res.json();
-  };
-
-  return <FamilyExportPage fetchCards={fetchCards} />;
+const fetchCards = async (pokemonName, language = "japanese") => {
+  const res = await fetch(
+    `/api/family-export?search=${encodeURIComponent(pokemonName)}&language=${language}`
+  );
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `Failed to fetch cards: ${res.status}`);
+  }
+  return res.json();
 };
 
 export default App;
