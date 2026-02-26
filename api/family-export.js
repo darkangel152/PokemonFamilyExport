@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
     const apiUrl = `https://www.pokemonpricetracker.com/api/v2/cards?search=${encodeURIComponent(
       search
-    )}&language=${language}`;
+    )}`;
 
     const response = await fetch(apiUrl, {
       headers: {
