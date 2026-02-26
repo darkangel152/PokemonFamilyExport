@@ -5,4 +5,4 @@ const App = () => {
   return <FamilyExportPage />;
 };
 
-export default App; // <-- must export default
+export default App;
