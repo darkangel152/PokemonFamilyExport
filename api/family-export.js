@@ -15,8 +15,11 @@ console.log("Fetching from API:", apiUrl);
       },
     });
 
-    if (!response.ok) return res.status(response.status).json({ error: "API error" });
-
+if (!response.ok) {
+  const text = await response.text(); // read API response
+  console.error("API response error:", text);
+  return res.status(response.status).json({ error: `API error: ${text}` });
+}
     const data = await response.json();
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(data);
