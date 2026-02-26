@@ -1,4 +1,4 @@
- export default async function handler(req, res) {
+export default async function handler(req, res) {
   try {
     const { search, language = "japanese" } = req.query;
 
@@ -10,8 +10,6 @@
       search
     )}&language=${language}`;
 
-    console.log("Fetching from Pokémon API:", apiUrl);
-
     const response = await fetch(apiUrl, {
       headers: {
         Authorization: `Bearer ${process.env.POKEMON_PRICE_TRACKER_API_KEY}`,
@@ -20,14 +18,13 @@
 
     const text = await response.text();
     if (!response.ok) {
-      console.error("Pokémon API returned error:", text);
       return res.status(response.status).json({ error: `Pokémon API error: ${text}` });
     }
 
     let data;
     try {
       data = JSON.parse(text);
-    } catch (parseErr) {
+    } catch (err) {
       return res.status(500).json({ error: "Failed to parse Pokémon API response" });
     }
 
