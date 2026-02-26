@@ -1,14 +1,13 @@
-// api/family-export.js
 export default async function handler(req, res) {
   try {
-    const { name, language = "japanese" } = req.query;
+    const { search, language = "japanese" } = req.query;
 
-    if (!name) {
-      return res.status(400).json({ error: "Missing Pokémon name" });
+    if (!search) {
+      return res.status(400).json({ error: "Missing search parameter" });
     }
 
-    const apiUrl = `https://www.pokemonpricetracker.com/api/v2/cards?name=${encodeURIComponent(
-      name
+    const apiUrl = `https://www.pokemonpricetracker.com/api/v2/cards?search=${encodeURIComponent(
+      search
     )}&language=${language}`;
 
     console.log("Fetching from Pokémon API:", apiUrl);
@@ -19,7 +18,7 @@ export default async function handler(req, res) {
       },
     });
 
-    const text = await response.text(); // read response as text first
+    const text = await response.text();
     if (!response.ok) {
       console.error("Pokémon API returned error:", text);
       return res.status(response.status).json({
@@ -28,7 +27,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // Try to parse JSON
     let data;
     try {
       data = JSON.parse(text);
@@ -41,7 +39,6 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "No cards found for this Pokémon" });
     }
 
-    // Return JSON to frontend
     res.setHeader("Content-Type", "application/json");
     res.status(200).json(data);
   } catch (err) {
